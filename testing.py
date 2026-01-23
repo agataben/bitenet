@@ -1,7 +1,6 @@
 import torch
 import numpy as np
 from sklearn.metrics import accuracy_score
-from utils import calculate_percentage_error
 
 # Setup logging
 import logging

@@ -4,3 +4,5 @@ scikit-learn==1.4.2
 torch==2.2.2
 torchvision==0.17.2
 pandas==2.2.2
+tensorboard==2.20.0
+PyYAML>=6.0,<7.0
