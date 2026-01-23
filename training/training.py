@@ -18,6 +18,14 @@ def train(model, train_ds, eval_ds, loaders,
           weight_dir = 'weights', exp_name = 'experiment',
           logdir = 'logs', config = False):
 
+    if config:
+        with open('config.yml', 'r') as file:
+            conf = yaml.safe_load(file)
+
+        lr = conf['learning_rate']
+        momentum = conf['momentum']
+        epochs = conf['epochs']
+
     criterion = nn.CrossEntropyLoss()
     optimizer = SGD(model.parameters(), lr = lr, momentum = momentum)
     loss_meter = AverageValueMeter()
