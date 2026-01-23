@@ -32,4 +32,4 @@ jobs:
 
       - name: Run unittest from project root
         run: |
-          python -m unittest -s tests discover
+          python -m unittest discover
