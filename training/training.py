@@ -15,7 +15,8 @@ logger = logging.getLogger(__name__)
 
 def train(model, train_ds, eval_ds, loaders,
           lr = 0.01, momentum = 0.99, epochs = 10,
-          weight_dir = 'weights', exp_name = 'experiment', logdir = 'logs'):
+          weight_dir = 'weights', exp_name = 'experiment',
+          logdir = 'logs', config = False):
 
     criterion = nn.CrossEntropyLoss()
     optimizer = SGD(model.parameters(), lr = lr, momentum = momentum)
