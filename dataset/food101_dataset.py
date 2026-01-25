@@ -14,10 +14,11 @@ class Food101DataSet(data.Dataset):
         return len(self.data)
 
     def __getitem__(self, i):
-        im_path, im_label = self.data.iloc[i]['path'], self.data.iloc[i].label
+        img_path, img_label = self.data.iloc[i]['path'], self.data.iloc[i].label
 
         if self.transform is not None:
-            im = self.transform(im)
+            img = Image.open(img_path)
+            img = self.transform(img)
 
-        return im, im_label
+        return img, img_label
 
