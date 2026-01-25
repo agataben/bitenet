@@ -2,6 +2,9 @@ import torch
 import random
 import numpy as np
 
+from os.path import basename
+from glob import glob
+
 
 # Seed setting
 def set_seed(seed):
@@ -42,4 +45,11 @@ def calculate_mean_and_std(x):
     std = torch.sqrt(std / len(x))
 
     return mean, std
+
+def get_list_of_img_paths(img_dir_path, img_dir_name):
+    imgs_common_path = img_dir_path + '/' + img_dir_name + '/*/'
+    img_paths = [ basename(path) for path in glob(imgs_common_path) ]
+    img_paths_from_img_dir = [ path.replace(img_dir_path,'') for path in img_paths ]
+
+    return img_paths_from_img_dir
 
