@@ -11,10 +11,7 @@ class TestTraining(unittest.TestCase):
     def setUp(self):
         # Set seed
         seed = 1238
-        torch.manual_seed(seed)
-        torch.cuda.manual_seed_all(seed)
-        np.random.seed(seed)
-        random.seed(seed)
+        set_seed(seed)
 
         # Toy model
         in_features_n = 4
