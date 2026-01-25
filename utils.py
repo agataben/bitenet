@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 
 from os.path import basename
+from os.path import dirname
 from glob import glob
 
 
@@ -68,6 +69,7 @@ def make_class_to_idx_map(img_dir_path, img_dir_name, cvs_path = None):
     return class_to_idx_dict
 
 def get_class_index_from_path(image_path, class_to_idx_dict):
-    class_name = basename(image_path)
+    class_path = dirname(image_path)
+    class_name = basename(class_path)
     return class_to_idx_dict[class_name]
 
