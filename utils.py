@@ -28,3 +28,18 @@ class AverageValueMeter():
         except:
             return None
 
+def calculate_mean_and_std(x):
+    canals_n = x[0][0].shape[0]
+
+    mean = torch.zeros(canals_n)
+    for sample in x:
+        mean += sample[0].view(canals_n, -1).mean(dim=1)
+    mean /= len(x)
+
+    std = torch.zeros(canals_n)
+    for sample in x:
+        std += ((sample[0].view(canals_n, -1) - mean[:, None])**2).mean(dim=1)
+    std = torch.sqrt(std / len(x))
+
+    return mean, std
+
