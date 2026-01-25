@@ -55,5 +55,12 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(class_to_idx_dict['churros'], 23)
 
     def test_get_class_index_from_path(self):
-        pass
+        # TODO: change the path
+        img_dir_path = '/Users/agatabenvegna/ML_LAB'
+        img_dir_name = 'images'
+        class_to_idx_dict = make_class_to_idx_map(img_dir_path, img_dir_name)
+
+        img_path = img_dir_path + '/' + img_dir_name + '/churros/77767.jpg'
+        indx = get_class_index_from_path(img_path, class_to_idx_dict)
+        self.assertEqual(indx, 23)
 
