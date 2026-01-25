@@ -47,7 +47,12 @@ class TestUtils(unittest.TestCase):
         self.assertIn('images/churros/77767.jpg', img_paths_from_img_dir)
 
     def test_make_class_to_idx_map(self):
-        pass
+        # TODO: change the path
+        img_dir_path = '/Users/agatabenvegna/ML_LAB'
+        img_dir_name = 'images'
+        class_to_idx_dict = make_class_to_idx_map(img_dir_path, img_dir_name)
+        self.assertIn('churros', class_to_idx_dict.keys())
+        self.assertEqual(class_to_idx_dict['churros'], 23)
 
     def test_get_class_index_from_path(self):
         pass
