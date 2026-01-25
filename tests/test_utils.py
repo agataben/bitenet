@@ -28,7 +28,15 @@ class TestUtils(unittest.TestCase):
         self.assertIsNone(meter.value())
 
     def test_calculate_mean_and_std(self):
-        pass
+        # 1*2*2
+        a = torch.Tensor([[[1,1], [1,1]]])
+        # 1*2*2
+        b = torch.Tensor([[[1,1], [1,1]]])
+        x = [[a , 'a'] , [b , 'b']]
+        mean, std = calculate_mean_and_std(x)
+        self.assertIsInstance(mean , torch.Tensor)
+        self.assertAlmostEqual(mean , torch.Tensor([1]))
+        self.assertAlmostEqual(std , torch.Tensor([0]))
 
     def test_get_list_of_img_paths(self):
         pass
