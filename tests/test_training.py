@@ -4,6 +4,7 @@ import numpy as np
 import random
 
 from training.training import train
+from utils import set_seed
 from torch import nn
 
 class TestTraining(unittest.TestCase):
