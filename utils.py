@@ -1,7 +1,7 @@
 import torch
 import random
 import numpy as np
-import pandas ad pd
+import pandas as pd
 
 from os.path import basename
 from glob import glob
