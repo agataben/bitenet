@@ -39,7 +39,12 @@ class TestUtils(unittest.TestCase):
         self.assertAlmostEqual(std , torch.Tensor([0]))
 
     def test_get_list_of_img_paths(self):
-        pass
+        # TODO: change the path
+        img_dir_path = '/Users/agatabenvegna/ML_LAB'
+        img_dir_name = 'images'
+        img_paths_from_img_dir = get_list_of_img_paths(img_dir_path, img_dir_name)
+        self.assertIsInstance(img_paths_from_img_dir, list)
+        self.assertIn('images/churros/77767.jpg', img_paths_from_img_dir)
 
     def test_make_class_to_idx_map(self):
         pass
