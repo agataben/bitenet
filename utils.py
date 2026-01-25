@@ -66,3 +66,7 @@ def make_class_to_idx_map(img_dir_path, img_dir_name, cvs_main_path, write_csv =
 
     return class_to_idx_dict
 
+def get_class_index_from_path(image_path, class_to_idx_dict):
+    class_name = basename(image_path)
+    return class_to_idx_dict[class_name]
+
