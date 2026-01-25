@@ -54,15 +54,16 @@ def get_list_of_img_paths(img_dir_path, img_dir_name):
 
     return img_paths_from_img_dir
 
-def make_class_to_idx_map(img_dir_path, img_dir_name, cvs_main_path, write_csv = False):
+def make_class_to_idx_map(img_dir_path, img_dir_name, cvs_path = None):
 
     classes_common_path = img_dir_path + '/' + img_dir_name + '/*'
     class_names = [ basename(path) for path in glob(classes_common_path) ]
+    class_names.sort()
     class_to_idx_dict = {class_name: idx for idx, class_name in enumerate(class_names)}
 
-    if write_csv:
+    if cvs_path is not None:
         class_to_idx_dict_df = pd.DataFrame(class_to_idx_dict)
-        class_to_idx_dict_df.to_csv(cvs_main_path + '/classes.csv')
+        class_to_idx_dict_df.to_csv(cvs_path + '/classes.csv')
 
     return class_to_idx_dict
 
