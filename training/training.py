@@ -2,6 +2,7 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from torch.optim import SGD
 from sklearn.metrics import accuracy_score
+from utils import AverageValueMeter
 from torch import nn
 import torch
 import yaml
@@ -13,8 +14,8 @@ from os.path import join
 import logging
 logger = logging.getLogger(__name__)
 
-def train(model, train_ds, eval_ds, loaders,
-          lr = 0.01, momentum = 0.99, epochs = 10,
+def train(model, loaders, lr = 0.01, 
+          momentum = 0.99, epochs = 10,
           weight_dir = 'weights', exp_name = 'experiment',
           logdir = 'logs', config = False):
 
