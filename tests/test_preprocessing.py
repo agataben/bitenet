@@ -7,6 +7,7 @@ from PIL import Image
 from utils import set_seed
 from dataset.preprocessing import download_food101
 from dataset.preprocessing import build_image_path_label_df
+from dataset.preprocessing import split_dataset
 
 class TestPreprocessing(unittest.TestCase):
 
@@ -34,4 +35,7 @@ class TestPreprocessing(unittest.TestCase):
         self.assertEqual(labels[0], 0)
         self.assertEqual(data_df.loc[0,'path'], 'images/toy/1234.jpg')
         self.assertEqual(data_df.loc[0,'label'], 0)
+
+    def test_split_dataset(self):
+        pass
 
