@@ -1,6 +1,7 @@
 import kagglehub
 import os
 import pandas as pd
+from sklearn.model_selection import train_test_split
 from utils import get_list_of_img_paths, make_class_to_idx_map
 from os.path import dirname
 
@@ -24,4 +25,15 @@ def build_image_path_label_df(data_root, is_for_test = False):
         return class_names, labels, pd.DataFrame(data)
 
     return pd.Dataframe(data)
+
+def split_dataset(dataset_df, train_size = 0.6, val_size = 0.1, test_size = 0.3, csv_path = None):
+    train_df, test_val_df = train_test_split(dataset_df, test_size = val_size + test_size)
+    val_df, test_df = train_test_split(test_val_df, test_size = test_size/(test_size + val_size))
+
+    if csv_path is not None:
+        train_df.to_csv(csv_path + '/train.csv', index = None)
+        val_df.to_csv(csv_path + '/val.csv', index = None)
+        test_df.to_csv(csv_path + '/test.csv', index = None)
+
+    return train_df, val_df, test_df
 
