@@ -1,11 +1,10 @@
-import torch
-from torch.utils import data
-from os.path import join
-from PIL import Image
 import pandas as pd
+from torch.utils import data
+from PIL import Image
+
 
 class Food101DataSet(data.Dataset):
-    def __init__(self, data_root, csv, transform=None):
+    def __init__(self, data_root, csv, transform = None):
         self.data_root = data_root
         self.data = pd.read_csv(csv)
         self.transform = transform
