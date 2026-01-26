@@ -2,10 +2,12 @@ import torch
 import random
 import numpy as np
 import pandas as pd
+import os
 
 from os.path import basename
 from os.path import dirname
 from glob import glob
+from PIL import Image
 
 
 # Seed setting
@@ -14,6 +16,17 @@ def set_seed(seed):
     torch.cuda.manual_seed_all(seed)
     np.random.seed(seed)
     random.seed(seed)
+
+def build_toy_dataset(data_root = 'tests/images', samplings_n = 3,
+                      w = 384, h = 384, chanels_n = 3):
+
+    for i in range(samplings_n):
+        array = (np.random.rand(w, h, chanels_n) * 255).astype(np.uint8)
+        img = Image.fromarray(array)
+        class_name = 'class_' + f'{i}' 
+        os.makedirs(data_root + '/' + class_name, exist_ok = True)
+        img_name = f'{i}' + '.jpg'
+        img.save(data_root + '/' + class_name + '/' + img_name)
 
 class AverageValueMeter():
     def __init__(self):

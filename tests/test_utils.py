@@ -11,6 +11,7 @@ from utils import calculate_mean_and_std
 from utils import get_list_of_img_paths
 from utils import make_class_to_idx_map
 from utils import get_class_index_from_path
+from utils import build_toy_dataset
 
 
 class TestUtils(unittest.TestCase):
@@ -20,12 +21,8 @@ class TestUtils(unittest.TestCase):
         seed = 1238
         set_seed(seed)
 
-        # Make a toy image for tests
-        # Image wants array with uint8 values from 0 to 255 for RGB image
-        array = (np.random.rand(384, 384, 3) * 255).astype(np.uint8)
-        img = Image.fromarray(array)
-        os.makedirs('tests/images/toy', exist_ok=True)
-        img.save('tests/images/toy/1234.jpg')
+        # Build toy dataset
+        build_toy_dataset(samplings_n = 1)
 
     def test_average_value_meter(self):
         meter = AverageValueMeter()
@@ -52,21 +49,21 @@ class TestUtils(unittest.TestCase):
         img_dir_name = 'images'
         img_paths_from_img_dir = get_list_of_img_paths(img_dir_path, img_dir_name)
         self.assertIsInstance(img_paths_from_img_dir, list)
-        self.assertIn('images/toy/1234.jpg', img_paths_from_img_dir)
+        self.assertIn('images/class_0/0.jpg', img_paths_from_img_dir)
 
     def test_make_class_to_idx_map(self):
         img_dir_path = 'tests'
         img_dir_name = 'images'
         class_to_idx_dict = make_class_to_idx_map(img_dir_path, img_dir_name)
-        self.assertIn('toy', class_to_idx_dict.keys())
-        self.assertEqual(class_to_idx_dict['toy'], 0)
+        self.assertIn('class_0', class_to_idx_dict.keys())
+        self.assertEqual(class_to_idx_dict['class_0'], 0)
 
     def test_get_class_index_from_path(self):
         img_dir_path = 'tests'
         img_dir_name = 'images'
         class_to_idx_dict = make_class_to_idx_map(img_dir_path, img_dir_name)
 
-        img_path = img_dir_path + '/' + img_dir_name + '/toy/1234.jpg'
+        img_path = img_dir_path + '/' + img_dir_name + '/class_0/0.jpg'
         indx = get_class_index_from_path(img_path, class_to_idx_dict)
         self.assertEqual(indx, 0)
 
