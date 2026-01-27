@@ -22,7 +22,8 @@ class TestPreprocessing(unittest.TestCase):
         build_toy_dataset(samplings_n = 4)
 
     def test_download_food101(self):
-        pass
+        data_root = download_food101()
+        self.assertIn('/.cache/kagglehub/datasets/dansbecker/food-101/versions/1', data_root)
 
     def test_build_image_path_label_df(self):
         class_names, labels, dataset_df = build_image_path_label_df('tests', True)
