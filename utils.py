@@ -8,6 +8,7 @@ from os.path import basename
 from os.path import dirname
 from glob import glob
 from PIL import Image
+from torchvision import transforms
 
 
 # Seed setting
@@ -17,16 +18,25 @@ def set_seed(seed):
     np.random.seed(seed)
     random.seed(seed)
 
-def build_toy_dataset(data_root = 'tests/images', samplings_n = 3,
-                      w = 384, h = 384, chanels_n = 3):
+def build_toy_dataset(data_root = 'tests', samplings_n = 3,
+                      w = 384, h = 384, chanels_n = 3, csv_path = None):
 
+    paths, labels = [], []
     for i in range(samplings_n):
         array = (np.random.rand(w, h, chanels_n) * 255).astype(np.uint8)
         img = Image.fromarray(array)
         class_name = 'class_' + f'{i}' 
-        os.makedirs(data_root + '/' + class_name, exist_ok = True)
+        labels.append(class_name)
+        os.makedirs(data_root + '/images/' + class_name, exist_ok = True)
         img_name = f'{i}' + '.jpg'
-        img.save(data_root + '/' + class_name + '/' + img_name)
+        path = data_root + '/images/' + class_name + '/' + img_name
+        img.save(path)
+        paths.append(path.replace(data_root + '/', ''))
+
+    if csv_path is not None:
+        path_label_dict = {'path': paths, 'labels': labels}
+        path_label_df = pd.DataFrame(path_label_dict)
+        path_label_df.to_csv(csv_path + '/toy_csv.csv' )
 
 class AverageValueMeter():
     def __init__(self):
@@ -46,18 +56,24 @@ class AverageValueMeter():
         except:
             return None
 
-def calculate_mean_and_std(x):
-    canals_n = x[0][0].shape[0]
+def calculate_mean_and_std(csv_path, data_root):
+    dataset_df = pd.read_csv(csv_path)
+    transform = transforms.ToTensor()
 
-    mean = torch.zeros(canals_n)
-    for sample in x:
-        mean += sample[0].view(canals_n, -1).mean(dim=1)
-    mean /= len(x)
+    mean = torch.zeros(3)
+    mean_sq = torch.zeros(3)
 
-    std = torch.zeros(canals_n)
-    for sample in x:
-        std += ((sample[0].view(canals_n, -1) - mean[:, None])**2).mean(dim=1)
-    std = torch.sqrt(std / len(x))
+    for i in range(len(dataset_df)):
+        path = dataset_df.iloc[i]['path']
+        sample = Image.open(os.path.join(data_root, path))
+        sample = transform(sample)
+        c = sample.shape[0]
+        x = sample.view(c, -1)
+        mean += x.mean(dim=1)
+        mean_sq += (x ** 2).mean(dim=1)
+
+    mean /= len(dataset_df)
+    std = torch.sqrt(mean_sq / len(dataset_df) - mean ** 2)
 
     return mean, std
 

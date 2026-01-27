@@ -22,7 +22,7 @@ class TestUtils(unittest.TestCase):
         set_seed(seed)
 
         # Build toy dataset
-        build_toy_dataset(samplings_n = 1)
+        build_toy_dataset(samplings_n = 1, csv_path = 'tests')
 
     def test_average_value_meter(self):
         meter = AverageValueMeter()
@@ -34,15 +34,15 @@ class TestUtils(unittest.TestCase):
         self.assertIsNone(meter.value())
 
     def test_calculate_mean_and_std(self):
-        # 1*2*2
-        a = torch.Tensor([[[1,1], [1,1]]])
-        # 1*2*2
-        b = torch.Tensor([[[1,1], [1,1]]])
-        x = [[a , 'a'] , [b , 'b']]
-        mean, std = calculate_mean_and_std(x)
-        self.assertIsInstance(mean , torch.Tensor)
-        self.assertAlmostEqual(mean , torch.Tensor([1]))
-        self.assertAlmostEqual(std , torch.Tensor([0]))
+        csv_path = 'tests/toy_csv.csv'
+        data_root = 'tests'
+        m, s = calculate_mean_and_std(csv_path, data_root)
+        self.assertAlmostEqual(m[0].item(), 0.5, places = 2)
+        self.assertAlmostEqual(m[1].item(), 0.5, places = 2)
+        self.assertAlmostEqual(m[2].item(), 0.5, places = 2)
+        self.assertAlmostEqual(s[0].item(), 0.21, places = 2)
+        self.assertAlmostEqual(s[1].item(), 0.21, places = 2)
+        self.assertAlmostEqual(s[2].item(), 0.21, places = 2)
 
     def test_get_list_of_img_paths(self):
         img_dir_path = 'tests'
