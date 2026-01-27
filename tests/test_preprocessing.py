@@ -21,6 +21,7 @@ class TestPreprocessing(unittest.TestCase):
         # Build toy dataset
         build_toy_dataset(samplings_n = 4)
 
+    @unittest.skipIf(os.getenv("CI") == "true", "Skip in CI")
     def test_download_food101(self):
         data_root = download_food101()
         self.assertIn('/.cache/kagglehub/datasets/dansbecker/food-101/versions/1', data_root)
