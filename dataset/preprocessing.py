@@ -4,12 +4,17 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from utils import get_list_of_img_paths, make_class_to_idx_map
 from os.path import dirname
-
+from glob import glob
 
 def download_food101():
-    kagglehub.login()
-    dataset_path = kagglehub.dataset_download('dansbecker/food-101')
-    return dataset_path
+    download_path = '/*/*/.cache/kagglehub/datasets/dansbecker/food-101/versions/1'
+    existing_paths = glob(download_path)
+    if len(existing_paths) == 1:
+        return existing_paths[0]
+    else:
+        kagglehub.login()
+        dataset_path = kagglehub.dataset_download('dansbecker/food-101')
+        return dataset_path
 
 def build_image_path_label_df(data_root, is_for_test = False):
     if not is_for_test:
