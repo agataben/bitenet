@@ -6,36 +6,30 @@ class BiteNetV1(nn.Module):
         super(BiteNetV1,self).__init__()
 
         self.conv_1 = nn.Sequential(
-            # 3x384x384 --> 18x190x190
+            # 3x224x224 --> 18x110x110
             nn.Conv2d(in_channels = 3, out_channels = 18, kernel_size = 6, stride = 2),
-            # 18x190x190 --> 18x95x95
+            # 18x110x110 --> 18x55x55
             nn.MaxPool2d(2),
             nn.ReLU()
         )
 
         self.conv_2 = nn.Sequential(
-            # 18x95x95 --> 28x46x46
+            # 18x55x55 --> 28x26x26
             nn.Conv2d(in_channels = 18, out_channels = 28, kernel_size = 5, stride = 2),
-            # 28x46x46 --> 28x23x23
+            # 28x26x26 --> 28x13x13
             nn.MaxPool2d(2),
             nn.ReLU()
         )
 
         self.conv_3 = nn.Sequential(
-            # 28x23x23 --> 28x10x10
-            nn.Conv2d(in_channels = 28, out_channels = 28, kernel_size = 5, stride = 2),
-            # 28x10x10 --> 28x5x5
+            # 28x13x13 --> 28x6x6
+            nn.Conv2d(in_channels = 28, out_channels = 28, kernel_size = 3, stride = 2),
+            # 28x6x6 --> 28x3x3
             nn.MaxPool2d(2),
             nn.ReLU()
         )
 
-        self.classifier = nn.Sequential(
-            nn.Linear(700,360),
-            nn.ReLU(),
-            nn.Linear(360,252),
-            nn.ReLU(),
-            nn.Linear(252,101)
-        )
+        self.classifier = nn.Linear(252,101)
             
     def forward(self,x):
         x = self.conv_1(x)
