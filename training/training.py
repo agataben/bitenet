@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 def train(model, loaders, lr = 0.01, 
           momentum = 0.99, epochs = 10,
           weight_dir = 'weights', exp_name = 'experiment',
-          logdir = 'logs', config = False):
+          logdir = 'logs', config = False, ckpt_path = None):
 
     if config:
         with open('config.yml', 'r') as file:
@@ -28,8 +28,17 @@ def train(model, loaders, lr = 0.01,
         epochs = conf['epochs']
         logger.debug(f'Training parameters: {lr}, {momentum}, {epochs}')
 
+    if ckpt_path is not None:
+        ckpt = torch.load(ckpt_path)
+        model.load_state_dict(ckpt['model'])
+        optimizer = SGD(model.parameters(), lr = lr, momentum = momentum)
+        optimizer.load_state_dict(ckpt['optimizer'])
+        start_epoch = ckpt['epoch'] + 1
+    else:
+        optimizer = SGD(model.parameters(), lr = lr, momentum = momentum)
+        start_epoch = 0
+
     criterion = nn.CrossEntropyLoss()
-    optimizer = SGD(model.parameters(), lr = lr, momentum = momentum)
     loss_meter = AverageValueMeter()
     acc_meter = AverageValueMeter()
 
@@ -39,7 +48,7 @@ def train(model, loaders, lr = 0.01,
 
     os.makedirs(weight_dir,exist_ok = True)
     global_step = 0
-    for e in range(epochs):
+    for e in range(start_epoch, start_epoch + epochs):
         logger.info(f'Epoch {e + 1} of {epochs}')
         for mode in ['train','test']:
             loss_meter.reset()
@@ -67,6 +76,11 @@ def train(model, loaders, lr = 0.01,
 
             writer.add_scalar('loss/'+ mode, loss_meter.value(), global_step = global_step)
             writer.add_scalar('accuracy/'+ mode, acc_meter.value(), global_step = global_step)
+
+        torch.save({
+            'optimizer': optimizer.state_dict(),
+            'epoch': epoch
+        }, ckpt_path + '/%s-%d.pth' % (exp_name, e + 1))
 
         torch.save(model.state_dict(), weight_dir + '/%s-%d.pth' % (exp_name, e + 1))
     return model
