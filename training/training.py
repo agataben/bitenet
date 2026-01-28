@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 def train(model, loaders, lr = 0.01, 
           momentum = 0.99, epochs = 10,
           weight_dir = 'weights', exp_name = 'experiment',
-          logdir = 'logs', config_path = None, ckpt_path = None):
+          logdir = 'logs', config_path = None, resume = False, ckpt_path = 'ckpt'):
 
     if config_path is not None:
         with open(config_path, 'r') as file:
@@ -28,7 +28,7 @@ def train(model, loaders, lr = 0.01,
         epochs = conf['epochs']
         logger.debug(f'Training parameters: {lr}, {momentum}, {epochs}')
 
-    if ckpt_path is not None:
+    if resume:
         ckpt = torch.load(ckpt_path)
         model.load_state_dict(ckpt['model'])
         optimizer = SGD(model.parameters(), lr = lr, momentum = momentum)
