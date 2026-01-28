@@ -17,10 +17,10 @@ logger = logging.getLogger(__name__)
 def train(model, loaders, lr = 0.01, 
           momentum = 0.99, epochs = 10,
           weight_dir = 'weights', exp_name = 'experiment',
-          logdir = 'logs', config = False, ckpt_path = None):
+          logdir = 'logs', config_path = None, ckpt_path = None):
 
-    if config:
-        with open('config.yml', 'r') as file:
+    if config_path is not None:
+        with open(config_path, 'r') as file:
             conf = yaml.safe_load(file)
 
         lr = conf['learning_rate']
@@ -79,7 +79,7 @@ def train(model, loaders, lr = 0.01,
 
         torch.save({
             'optimizer': optimizer.state_dict(),
-            'epoch': epoch
+            'epoch': e
         }, ckpt_path + '/%s-%d.pth' % (exp_name, e + 1))
 
         torch.save(model.state_dict(), weight_dir + '/%s-%d.pth' % (exp_name, e + 1))
