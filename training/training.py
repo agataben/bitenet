@@ -46,7 +46,8 @@ def train(model, loaders, lr = 0.01,
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     model.to(device)
 
-    os.makedirs(weight_dir,exist_ok = True)
+    os.makedirs(weight_dir, exist_ok = True)
+    os.makedirs(ckpt_path, exist_ok = True)
     global_step = 0
     for e in range(start_epoch, start_epoch + epochs):
         logger.info(f'Epoch {e + 1} of {epochs}')
