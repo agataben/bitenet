@@ -30,8 +30,8 @@ def train(model, loaders, lr = 0.01,
 
     if resume:
         ckpt = torch.load(ckpt_path)
-        model.load_state_dict(ckpt['model'])
-        optimizer = SGD(model.parameters(), lr = lr, momentum = momentum)
+        last_epoch = ckpt['epoch']
+        model.load_state_dict(weight_dir + '/%s-%d.pth' % (exp_name, last_epoch))
         optimizer.load_state_dict(ckpt['optimizer'])
         start_epoch = ckpt['epoch'] + 1
     else:
@@ -80,7 +80,7 @@ def train(model, loaders, lr = 0.01,
 
         torch.save({
             'optimizer': optimizer.state_dict(),
-            'epoch': e
+            'epoch': e + 1
         }, ckpt_path + '/%s-%d.pth' % (exp_name, e + 1))
 
         torch.save(model.state_dict(), weight_dir + '/%s-%d.pth' % (exp_name, e + 1))
