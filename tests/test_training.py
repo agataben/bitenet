@@ -19,12 +19,12 @@ class TestTraining(unittest.TestCase):
 
         # Toy model
         in_features_n = 4
-        out_features_n = 1
+        out_features_n = 2
         self.toy_model = nn.Linear(in_features_n, out_features_n)
 
         # Toy loaders
-        x = torch.rand(4)
-        y = torch.Tensor(1)
+        x = torch.tensor([1., 2., 3., 4.])
+        y = torch.tensor(1)
         train_ds = [(x, y), (x, y)]
         test_ds = [(x, y), (x, y)]
         train = DataLoader(train_ds, batch_size = 1, num_workers = 0)
