@@ -10,14 +10,9 @@ import os
 from os.path import join
 
 
-# Setup logging
-import logging
-logger = logging.getLogger(__name__)
-
-def train(model, loaders, lr = 0.01, 
-          momentum = 0.99, epochs = 10,
-          weight_dir = 'weights', exp_name = 'experiment',
-          logdir = 'logs', config_path = None, resume = False, ckpt_path = 'ckpt'):
+def train(model, loaders, config_path = None,
+          lr = 0.01, momentum = 0.99, epochs = 10,
+          exp_name = 'exp', logdir = 'logs', ckpt_dir = 'ckpt', ckpt_file = None):
 
     if config_path is not None:
         with open(config_path, 'r') as file:
@@ -28,29 +23,28 @@ def train(model, loaders, lr = 0.01,
         epochs = conf['epochs']
         logger.debug(f'Training parameters: {lr}, {momentum}, {epochs}')
 
-    if resume:
-        ckpt = torch.load(ckpt_path)
-        last_epoch = ckpt['epoch']
-        model.load_state_dict(weight_dir + '/%s-%d.pth' % (exp_name, last_epoch))
-        optimizer.load_state_dict(ckpt['optimizer'])
-        start_epoch = ckpt['epoch'] + 1
-    else:
-        optimizer = SGD(model.parameters(), lr = lr, momentum = momentum)
-        start_epoch = 0
-
+    optimizer = SGD(model.parameters(), lr = lr, momentum = momentum)
     criterion = nn.CrossEntropyLoss()
     loss_meter = AverageValueMeter()
     acc_meter = AverageValueMeter()
 
-    writer = SummaryWriter(join(logdir, exp_name))
+    if ckpt_file is not None:
+        ckpt = torch.load(ckpt_file)
+        model.load_state_dict(ckpt['model'])
+        optimizer.load_state_dict(ckpt['optimizer'])
+        start_epoch = ckpt['epoch']
+    else:
+        start_epoch = 0
+
+    if logdir is not None:
+        writer = SummaryWriter(join(logdir, exp_name))
+    if ckpt_dir is not None:
+        os.makedirs(ckpt_dir, exist_ok = True)
+
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     model.to(device)
-
-    os.makedirs(weight_dir, exist_ok = True)
-    os.makedirs(ckpt_path, exist_ok = True)
     global_step = 0
     for e in range(start_epoch, start_epoch + epochs):
-        logger.info(f'Epoch {e + 1} of {epochs}')
         for mode in ['train','test']:
             loss_meter.reset()
             acc_meter.reset()
@@ -72,17 +66,19 @@ def train(model, loaders, lr = 0.01,
                     loss_meter.add(loss.item(), batch_size)
                     acc_meter.add(acc, batch_size)
                     if mode == 'train':
-                        writer.add_scalar('loss/train', loss_meter.value(), global_step = global_step)
-                        writer.add_scalar('accuracy/train', acc_meter.value(), global_step = global_step)
+                        if logdir is not None:
+                            writer.add_scalar('loss/train', loss_meter.value(), global_step = global_step)
+                            writer.add_scalar('accuracy/train', acc_meter.value(), global_step = global_step)
+            if logdir is not None:
+                writer.add_scalar('loss/'+ mode, loss_meter.value(), global_step = global_step)
+                writer.add_scalar('accuracy/'+ mode, acc_meter.value(), global_step = global_step)
 
-            writer.add_scalar('loss/'+ mode, loss_meter.value(), global_step = global_step)
-            writer.add_scalar('accuracy/'+ mode, acc_meter.value(), global_step = global_step)
+        if ckpt_dir is not None:
+            torch.save({
+                'optimizer': optimizer.state_dict(),
+                'model': model.state_dict(),
+                'epoch': e + 1
+            }, ckpt_dir + '/%s-%d.pth' % (exp_name, e + 1))
 
-        torch.save({
-            'optimizer': optimizer.state_dict(),
-            'epoch': e + 1
-        }, ckpt_path + '/%s-%d.pth' % (exp_name, e + 1))
-
-        torch.save(model.state_dict(), weight_dir + '/%s-%d.pth' % (exp_name, e + 1))
     return model
 
