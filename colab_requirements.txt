@@ -1,4 +1,4 @@
 tensorboard==2.20.0
-kaggle==1.7,<2.0.0
+kaggle==1.8,<2.0.0
 kagglehub==1.0.0,<2.0.0
 kagglesdk==0.1.15,<1.0.0
