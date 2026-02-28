@@ -46,3 +46,7 @@ class TestPreprocessing(unittest.TestCase):
         self.assertEqual(len(train_df), 2)
         self.assertEqual(len(test_df), 2)
 
+    def test_split_dataset_path(self):
+        class_names, labels, dataset_df = build_image_path_label_df('tests', True)
+        train_df, test_df = split_dataset(dataset_df, train_size = 0.5, val_size = 0.0, test_size = 0.5,
+                                          csv_path = 'dataset')

@@ -40,6 +40,7 @@ def split_dataset(dataset_df, train_size = 0.6, val_size = 0.1, test_size = 0.3,
         val_df, test_df = train_test_split(test_val_df, test_size = test_size/(test_size + val_size))
 
     if csv_path is not None:
+        os.makedirs(csv_path, exist_ok=True)
         train_df.to_csv(csv_path + '/train.csv', index = None)
         test_df.to_csv(csv_path + '/test.csv', index = None)
         if val_size:
