@@ -87,6 +87,16 @@ def calculate_mean_and_std(csv_path, data_root, yaml_path = None):
 
     return mean, std
 
+def get_norm_parameters(yaml_path):
+    with open(os.path.join(yaml_path, 'normalizzation.yaml'), 'r') as f:
+        try:
+            params = yaml.safe_load(f)
+        except exception as e:
+            raise Exception(f'Missing normalizzation.yaml file in {yaml_path}.')
+    mean = params['mean']
+    std = params['std']
+    return torch.Tensor(mean), torch.Tensor(std)
+
 def get_list_of_img_paths(img_dir_path, img_dir_name):
     imgs_common_path = img_dir_path + '/' + img_dir_name + '/*/*'
     img_paths = glob(imgs_common_path)

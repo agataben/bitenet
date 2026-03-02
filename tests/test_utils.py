@@ -69,6 +69,21 @@ class TestUtils(unittest.TestCase):
         self.assertAlmostEqual(config['std'][1], 0.21, places = 2)
         self.assertAlmostEqual(config['std'][2], 0.21, places = 2)
 
+    def test_get_norm_parameters(self):
+        csv_path = 'tests/toy_csv.csv'
+        data_root = 'tests'
+        yaml_path = 'tests'
+        m, s = calculate_mean_and_std(csv_path, data_root, yaml_path)
+        mean, std = get_norm_parameters(yaml_path)
+        self.assertIsInstance(mean, torch.Tensor)
+        self.assertIsInstance(std, torch.Tensor)
+        self.assertAlmostEqual(mean[0].item(), 0.5, places = 2)
+        self.assertAlmostEqual(mean[1].item(), 0.5, places = 2)
+        self.assertAlmostEqual(mean[2].item(), 0.5, places = 2)
+        self.assertAlmostEqual(std[0].item(), 0.21, places = 2)
+        self.assertAlmostEqual(std[1].item(), 0.21, places = 2)
+        self.assertAlmostEqual(std[2].item(), 0.21, places = 2)
+
     def test_get_list_of_img_paths(self):
         img_dir_path = 'tests'
         img_dir_name = 'images'
