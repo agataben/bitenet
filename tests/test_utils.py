@@ -62,12 +62,12 @@ class TestUtils(unittest.TestCase):
 
         with open(os.path.join(yaml_path, 'normalizzation.yaml'), 'r') as f:
             config = yaml.safe_load(f)
-            self.assertAlmostEqual(config['mean'][0], 0.5, places = 2)
-            self.assertAlmostEqual(config['mean'][1], 0.5, places = 2)
-            self.assertAlmostEqual(config['mean'][2], 0.5, places = 2)
-            self.assertAlmostEqual(config['std'][0], 0.21, places = 2)
-            self.assertAlmostEqual(config['std'][1], 0.21, places = 2)
-            self.assertAlmostEqual(config['std'][2], 0.21, places = 2)
+        self.assertAlmostEqual(config['mean'][0], 0.5, places = 2)
+        self.assertAlmostEqual(config['mean'][1], 0.5, places = 2)
+        self.assertAlmostEqual(config['mean'][2], 0.5, places = 2)
+        self.assertAlmostEqual(config['std'][0], 0.21, places = 2)
+        self.assertAlmostEqual(config['std'][1], 0.21, places = 2)
+        self.assertAlmostEqual(config['std'][2], 0.21, places = 2)
 
     def test_get_list_of_img_paths(self):
         img_dir_path = 'tests'
