@@ -5,13 +5,13 @@ import numpy as np
 import random
 
 from PIL import Image
-from utils import set_seed
-from utils import AverageValueMeter
-from utils import calculate_mean_and_std
-from utils import get_list_of_img_paths
-from utils import make_class_to_idx_map
-from utils import get_class_index_from_path
-from utils import build_toy_dataset
+from src.utils import set_seed
+from src.utils import AverageValueMeter
+from src.utils import calculate_mean_and_std
+from src.utils import get_list_of_img_paths
+from src.utils import make_class_to_idx_map
+from src.utils import get_class_index_from_path
+from src.utils import build_toy_dataset
 
 
 class TestUtils(unittest.TestCase):

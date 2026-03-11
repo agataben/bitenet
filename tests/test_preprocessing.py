@@ -5,11 +5,11 @@ import random
 import pandas as pd
 
 from PIL import Image
-from utils import set_seed
-from utils import build_toy_dataset
-from dataset.preprocessing import download_food101
-from dataset.preprocessing import build_image_path_label_df
-from dataset.preprocessing import split_dataset
+from src.utils import set_seed
+from src.utils import build_toy_dataset
+from src.preprocessing import download_food101
+from src.preprocessing import build_image_path_label_df
+from src.preprocessing import split_dataset
 
 class TestPreprocessing(unittest.TestCase):
 

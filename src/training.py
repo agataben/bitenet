@@ -2,7 +2,7 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 from torch.optim import SGD
 from sklearn.metrics import accuracy_score
-from utils import AverageValueMeter
+from src.utils import AverageValueMeter
 from torch import nn
 import torch
 import yaml
