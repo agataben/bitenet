@@ -1,5 +1,5 @@
 import unittest
-from dataset.food101_dataset import Food101DataSet
+from src.food101_dataset import Food101DataSet
 
 
 class TestFood101DataSet(unittest.TestCase):

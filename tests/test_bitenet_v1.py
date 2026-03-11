@@ -3,8 +3,8 @@ import torch
 import numpy as np
 import random
 
-from models.bitenet_v1.bitenet_v1 import BiteNetV1
-from utils import set_seed
+from src.bitenet_v1 import BiteNetV1
+from src.utils import set_seed
 from PIL import Image
 
 class TestBiteNetV1(unittest.TestCase):

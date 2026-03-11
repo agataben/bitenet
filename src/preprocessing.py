@@ -2,7 +2,7 @@ import kagglehub
 import os
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from utils import get_list_of_img_paths, make_class_to_idx_map
+from src.utils import get_list_of_img_paths, make_class_to_idx_map
 from os.path import dirname
 from glob import glob
 

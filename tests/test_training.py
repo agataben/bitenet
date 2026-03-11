@@ -5,8 +5,8 @@ import random
 import os
 
 from torch.utils.data import DataLoader
-from training.training import train
-from utils import set_seed
+from src.training import train
+from src.utils import set_seed
 from torch import nn
 from glob import glob
 
