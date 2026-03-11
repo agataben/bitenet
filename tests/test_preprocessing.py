@@ -5,6 +5,7 @@ import random
 import pandas as pd
 
 from PIL import Image
+from glob import glob
 from src.utils import set_seed
 from src.utils import build_toy_dataset
 from src.preprocessing import download_food101

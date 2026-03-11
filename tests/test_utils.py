@@ -6,6 +6,7 @@ import random
 import yaml
 
 from PIL import Image
+from glob import glob
 from src.utils import set_seed
 from src.utils import AverageValueMeter
 from src.utils import calculate_mean_and_std
@@ -13,6 +14,7 @@ from src.utils import get_list_of_img_paths
 from src.utils import make_class_to_idx_map
 from src.utils import get_class_index_from_path
 from src.utils import build_toy_dataset
+from src.utils import get_norm_parameters
 
 
 class TestUtils(unittest.TestCase):
