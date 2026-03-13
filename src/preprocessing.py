@@ -17,8 +17,6 @@ def download_food101():
         return dataset_path
 
 def build_image_path_label_df(data_root, is_for_test = False):
-    if not is_for_test:
-        data_root = data_root + '/food-101/food-101'
 
     img_paths = get_list_of_img_paths(data_root, 'images')
     map = make_class_to_idx_map(data_root, 'images')
