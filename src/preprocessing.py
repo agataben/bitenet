@@ -23,11 +23,11 @@ def build_image_path_label_df(data_root, is_for_test = False):
     class_names = [ dirname(path.replace('images/','')) for path in img_paths ]
     labels = [ map[class_name] for class_name in class_names ]
     data = {'path': img_paths, 'label': labels}
-
+    df = pd.DataFrame(data)
     if is_for_test:
-        return class_names, labels, pd.DataFrame(data)
+        return class_names, labels, df
 
-    return pd.DataFrame(data)
+    return df
 
 def split_dataset(dataset_df, train_size = 0.6, val_size = 0.1, test_size = 0.3, csv_path = None):
     if len(dataset_df) == 0:
