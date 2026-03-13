@@ -19,9 +19,9 @@ def download_food101():
 def build_image_path_label_df(data_root, is_for_test = False):
 
     img_paths = get_list_of_img_paths(data_root, 'images')
-    map = make_class_to_idx_map(data_root, 'images')
+    class_to_idx = make_class_to_idx_map(data_root, 'images')
     class_names = [ dirname(path.replace('images/','')) for path in img_paths ]
-    labels = [ map[class_name] for class_name in class_names ]
+    labels = [ class_to_idx[class_name] for class_name in class_names ]
     data = {'path': img_paths, 'label': labels}
     df = pd.DataFrame(data)
     if is_for_test:
