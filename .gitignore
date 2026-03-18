@@ -206,3 +206,6 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 .DS_Store
+tests/images/
+tests/normalizzation.yaml
+tests/toy_csv.csv
