@@ -209,3 +209,4 @@ __marimo__/
 tests/images/
 tests/normalizzation.yaml
 tests/toy_csv.csv
+.tmp.driveupload/
