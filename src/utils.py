@@ -3,6 +3,7 @@ import random
 import numpy as np
 import pandas as pd
 import os
+import yaml
 
 from os.path import basename
 from os.path import dirname
@@ -56,7 +57,7 @@ class AverageValueMeter():
         except:
             return None
 
-def calculate_mean_and_std(csv_path, data_root):
+def calculate_mean_and_std(csv_path, data_root, yaml_path = None):
     dataset_df = pd.read_csv(csv_path)
     transform = transforms.ToTensor()
 
@@ -75,7 +76,26 @@ def calculate_mean_and_std(csv_path, data_root):
     mean /= len(dataset_df)
     std = torch.sqrt(mean_sq / len(dataset_df) - mean ** 2)
 
+    if yaml_path is not None:
+        mean_list = mean.tolist()
+        std_list = std.tolist()
+        params = {'mean': mean_list,
+                  'std': std_list}
+        os.makedirs(yaml_path, exist_ok = True)
+        with open(os.path.join(yaml_path, 'normalizzation.yaml'), 'w') as f:
+            yaml.dump(params, f, default_flow_style=False)
+
     return mean, std
+
+def get_norm_parameters(yaml_path):
+    with open(os.path.join(yaml_path, 'normalizzation.yaml'), 'r') as f:
+        try:
+            params = yaml.safe_load(f)
+        except exception as e:
+            raise Exception(f'Missing normalizzation.yaml file in {yaml_path}.')
+    mean = params['mean']
+    std = params['std']
+    return torch.Tensor(mean), torch.Tensor(std)
 
 def get_list_of_img_paths(img_dir_path, img_dir_name):
     imgs_common_path = img_dir_path + '/' + img_dir_name + '/*/*'
