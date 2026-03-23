@@ -7,4 +7,4 @@ pandas==2.2.2
 tensorboard==2.20.0
 PyYAML>=6.0,<7.0
 kaggle>=1.6,<1.7
-kagglehub==0.4.1,<1.0.0
+kagglehub==1.0.0,<2.0.0
