@@ -21,7 +21,6 @@ def train(model, loaders, config_path = None,
         lr = conf['learning_rate']
         momentum = conf['momentum']
         epochs = conf['epochs']
-        logger.debug(f'Training parameters: {lr}, {momentum}, {epochs}')
 
     optimizer = SGD(model.parameters(), lr = lr, momentum = momentum)
     criterion = nn.CrossEntropyLoss()

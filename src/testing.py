@@ -2,10 +2,6 @@ import torch
 import numpy as np
 from sklearn.metrics import accuracy_score
 
-# Setup logging
-import logging
-logger = logging.getLogger(__name__)
-
 
 def test(model,test_loader):
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -20,7 +16,7 @@ def test(model,test_loader):
         predictions.extend(list(preds))
         labels.extend(list(labs))
 
-    logger.info(f'Accuracy: {accuracy_score(labels,predictions)}')
+    print(f'Accuracy: {accuracy_score(labels, predictions)}')
 
     return np.array(predictions), np.array(labels)
 
