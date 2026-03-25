@@ -7,7 +7,9 @@ import yaml
 
 from PIL import Image
 from glob import glob
+from unittest.mock import patch
 from src.utils import set_seed
+from src.utils import plot_dataset
 from src.utils import AverageValueMeter
 from src.utils import calculate_mean_and_std
 from src.utils import get_list_of_img_paths
@@ -118,4 +120,12 @@ class TestUtils(unittest.TestCase):
 
         self.assertIsInstance(tranf_img, torch.Tensor)
         self.assertEqual(tranf_img.shape, (1, 3, 224, 224))
+
+    @patch("matplotlib.pyplot.show")
+    def test_plot_dataset(self, mock_show):
+        dataset_path = 'donut'
+        try:
+            plot_dataset(dataset_path)
+        except Exception as e:
+            self.assertIsInstance(e, ValueError)
 

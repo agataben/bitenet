@@ -10,7 +10,8 @@ from os.path import dirname
 from glob import glob
 from PIL import Image
 from torchvision import transforms
-
+from mpl_toolkits.axes_grid1 import ImageGrid
+from matplotlib import pyplot as plt
 
 # Seed setting
 def set_seed(seed):
@@ -135,4 +136,25 @@ def transform_input_img(img_path, path_to_norm_params_file):
                                         transforms.Lambda(lambda x: x.unsqueeze(0))
                                         ])
     return input_transf(img)
+
+def plot_dataset(dataset_path):
+    if not os.path.exists(dataset_path):
+        raise ValueError(f'Path {dataset_path} does not exist.')
+
+    img_paths = glob(os.path.join(dataset_path, '*.jpg'))
+    if len(img_paths) == 0:
+        raise ValueError(f'No images in the selected path.')
+
+    plt.figure(figsize = (18, 6))
+    for i, img_path in enumerate(img_paths):
+        if i >= 27:
+            break
+        food_class = basename(img_path).replace('.jpg', '')
+        plt.subplot(3, 9, i + 1)
+        img = Image.open(img_path).convert('RGB')
+        plt.imshow(img)
+        plt.title(f'Class {food_class}')
+        plt.axis('off')
+
+    plt.show()
 
