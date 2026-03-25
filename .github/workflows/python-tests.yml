@@ -3,8 +3,6 @@ name: Python Unit Tests
 
 on:
   push:
-    branches-ignore:
-      - main
 
 
 jobs:
