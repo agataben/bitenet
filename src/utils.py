@@ -122,3 +122,17 @@ def get_class_index_from_path(image_path, class_to_idx_dict):
     class_name = basename(class_path)
     return class_to_idx_dict[class_name]
 
+def transform_input_img(img_path, path_to_norm_params_file):
+    if not os.path.exists(img_path):
+        raise ValueError(f'Path {img_path} does not exist')
+    img = Image.open(img_path).convert('RGB')
+
+    mean, std = get_norm_parameters(path_to_norm_params_file)
+    input_transf = transforms.Compose([ transforms.Resize(256),
+                                        transforms.CenterCrop(224),
+                                        transforms.ToTensor(),
+                                        transforms.Normalize(mean,std),
+                                        transforms.Lambda(lambda x: x.unsqueeze(0))
+                                        ])
+    return input_transf(img)
+

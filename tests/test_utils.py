@@ -15,6 +15,7 @@ from src.utils import make_class_to_idx_map
 from src.utils import get_class_index_from_path
 from src.utils import build_toy_dataset
 from src.utils import get_norm_parameters
+from src.utils import transform_input_img
 
 
 class TestUtils(unittest.TestCase):
@@ -108,4 +109,13 @@ class TestUtils(unittest.TestCase):
         img_path = img_dir_path + '/' + img_dir_name + '/class_0/0.jpg'
         indx = get_class_index_from_path(img_path, class_to_idx_dict)
         self.assertEqual(indx, 0)
+
+    def test_transform_input_img(self):
+        img_path = 'tests/images/class_0/0.jpg'
+        path_to_norm_params_file = 'tests'
+        tranf_img = transform_input_img(img_path = img_path,
+                            path_to_norm_params_file = path_to_norm_params_file)
+
+        self.assertIsInstance(tranf_img, torch.Tensor)
+        self.assertEqual(tranf_img.shape, (1, 3, 224, 224))
 
