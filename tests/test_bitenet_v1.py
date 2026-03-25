@@ -25,3 +25,11 @@ class TestBiteNetV1(unittest.TestCase):
         self.assertEqual(x_2.shape, torch.Size([1,28,13,13]))
         self.assertEqual(x_3.shape, torch.Size([1,28,3,3]))
 
+    def test_predict(self):
+        img_path = 'tests/images/class_0/0.jpg'
+
+        model = BiteNetV1()
+        model.path_to_norm_params_file = 'tests'
+        model.eval()
+        prediction = model.predict(img_path)
+        self.assertIsInstance(prediction, torch.Tensor)
