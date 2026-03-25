@@ -6,6 +6,7 @@ import random
 from src.bitenet_v1 import BiteNetV1
 from src.utils import set_seed
 from src.utils import build_toy_dataset
+from src.utils import calculate_mean_and_std
 
 class TestBiteNetV1(unittest.TestCase):
 
@@ -30,9 +31,13 @@ class TestBiteNetV1(unittest.TestCase):
 
     def test_predict(self):
         img_path = 'tests/images/class_0/0.jpg'
+        yaml_path = 'tests'
+        csv_path = 'tests/toy_csv.csv'
+        data_root = 'tests'
+        m, s = calculate_mean_and_std(csv_path, data_root, yaml_path)
 
         model = BiteNetV1()
-        model.path_to_norm_params_file = 'tests'
+        model.path_to_norm_params_file = yaml_path
         model.eval()
         prediction = model.predict(img_path)
         self.assertIsInstance(prediction, torch.Tensor)
