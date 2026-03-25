@@ -137,9 +137,14 @@ def transform_input_img(img_path, path_to_norm_params_file):
                                         ])
     return input_transf(img)
 
-def plot_dataset(dataset_path):
+def plot_dataset(dataset_path, class_to_indx_csv):
     if not os.path.exists(dataset_path):
         raise ValueError(f'Path {dataset_path} does not exist.')
+    if not os.path.exists(class_to_indx_csv):
+        raise ValueError(f'Path {class_to_indx_csv} does not exist.')
+
+    with open(class_to_indx_csv) as f:
+        class_to_indx_dict = csv.DictReader(f)
 
     img_paths = glob(os.path.join(dataset_path, '*.jpg'))
     if len(img_paths) == 0:
@@ -153,7 +158,7 @@ def plot_dataset(dataset_path):
         plt.subplot(3, 9, i + 1)
         img = Image.open(img_path).convert('RGB')
         plt.imshow(img)
-        plt.title(f'Class {food_class}')
+        plt.title(f'{food_class} ({class_to_indx_dict[food_class]})')
         plt.axis('off')
 
     plt.show()

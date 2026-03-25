@@ -125,8 +125,9 @@ class TestUtils(unittest.TestCase):
     @patch("matplotlib.pyplot.show")
     def test_plot_dataset(self, mock_show):
         dataset_path = 'donut'
+        class_to_indx_dict = {'papaya': 2}
         try:
-            plot_dataset(dataset_path)
+            plot_dataset(dataset_path, class_to_indx_dict)
         except Exception as e:
             self.assertIsInstance(e, ValueError)
 
