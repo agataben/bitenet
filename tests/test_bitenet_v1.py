@@ -5,7 +5,7 @@ import random
 
 from src.bitenet_v1 import BiteNetV1
 from src.utils import set_seed
-from PIL import Image
+from src.utils import build_toy_dataset
 
 class TestBiteNetV1(unittest.TestCase):
 
@@ -13,6 +13,9 @@ class TestBiteNetV1(unittest.TestCase):
         # Set seed
         seed = 1238
         set_seed(seed)
+
+        # Build toy dataset
+        build_toy_dataset(samplings_n = 1, csv_path = 'tests')
 
     def test_output_size_conv_layers(self):
         model = BiteNetV1()
