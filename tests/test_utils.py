@@ -10,6 +10,7 @@ from glob import glob
 from unittest.mock import patch
 from src.utils import set_seed
 from src.utils import plot_dataset
+from src.utils import plot_dataset_composition
 from src.utils import AverageValueMeter
 from src.utils import calculate_mean_and_std
 from src.utils import get_list_of_img_paths
@@ -128,4 +129,16 @@ class TestUtils(unittest.TestCase):
             plot_dataset(dataset_path)
         except Exception as e:
             self.assertIsInstance(e, ValueError)
+
+    @patch("matplotlib.pyplot.show")
+    def test_plot_dataset_composition(self, mock_show):
+        csv_path = 'donut'
+        try:
+            plot_dataset_composition(csv_path)
+        except Exception as e:
+            self.assertIsInstance(e, ValueError)
+
+        counts = plot_dataset_composition('tests/toy_csv.csv', is_for_test = True)
+        self.assertIn('class_0', counts.keys())
+        self.assertEqual(counts['class_0'], 1)
 

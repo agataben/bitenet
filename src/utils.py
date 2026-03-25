@@ -4,13 +4,13 @@ import numpy as np
 import pandas as pd
 import os
 import yaml
+import csv
 
 from os.path import basename
 from os.path import dirname
 from glob import glob
 from PIL import Image
 from torchvision import transforms
-from mpl_toolkits.axes_grid1 import ImageGrid
 from matplotlib import pyplot as plt
 
 # Seed setting
@@ -157,4 +157,28 @@ def plot_dataset(dataset_path):
         plt.axis('off')
 
     plt.show()
+
+def plot_dataset_composition(cvs_path, is_for_test = False):
+    if not os.path.exists(cvs_path):
+        raise ValueError(f'Path {cvs_path} does not exist.')
+
+    counts = {}
+    with open(cvs_path) as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            path = row['path']
+            food = dirname(path.replace('images/',''))
+            if food not in counts.keys():
+                counts[food] = 0
+            counts[food]+= 1
+
+    labels = list(counts.keys())
+    values = list(counts.values())
+
+    plt.figure(figsize = (12, 6))
+    plt.bar(labels, values)
+    plt.xticks(rotation = 45, ha = 'right')
+    plt.show()
+    if is_for_test:
+        return counts
 
