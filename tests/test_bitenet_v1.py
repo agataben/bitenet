@@ -7,6 +7,7 @@ from src.bitenet_v1 import BiteNetV1
 from src.utils import set_seed
 from src.utils import build_toy_dataset
 from src.utils import calculate_mean_and_std
+from src.utils import make_class_to_idx_map
 
 class TestBiteNetV1(unittest.TestCase):
 
@@ -30,12 +31,17 @@ class TestBiteNetV1(unittest.TestCase):
         self.assertEqual(x_3.shape, torch.Size([1,28,3,3]))
 
     def test_predict(self):
+        img_dir_path = 'tests'
+        img_dir_name = 'images'
+        csv_path = 'tests'
+        class_to_idx_dict = make_class_to_idx_map(img_dir_path, img_dir_name, csv_path, for_test = True)
+
         img_path = 'tests/images/class_0/0.jpg'
         yaml_path = 'tests'
-        csv_path = 'tests/toy_csv.csv'
+        csv_file = 'tests/toy_csv.csv'
         conversion_file = 'tests/classes.csv'
         data_root = 'tests'
-        m, s = calculate_mean_and_std(csv_path, data_root, yaml_path)
+        m, s = calculate_mean_and_std(csv_file, data_root, yaml_path)
 
         model = BiteNetV1()
         model.path_to_norm_params_file = yaml_path
