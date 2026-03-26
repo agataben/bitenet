@@ -31,7 +31,7 @@ class TestUtils(unittest.TestCase):
         set_seed(seed)
 
         # Build toy dataset
-        build_toy_dataset(samplings_n = 1, csv_path = 'tests')
+        build_toy_dataset(samplings_n = 27, csv_path = 'tests')
 
     def test_average_value_meter(self):
         meter = AverageValueMeter()
@@ -170,8 +170,11 @@ class TestUtils(unittest.TestCase):
         self.assertEqual(counts['class_0'], 1)
 
     def test_make_conversion_dict(self):
-        csv_path = 'tests/classes.csv'
-        conv_dict = make_conversion_dict(csv_path)
+        img_dir_path = 'tests'
+        img_dir_name = 'images'
+        csv_path = 'tests'
+        class_to_idx_dict = make_class_to_idx_map(img_dir_path, img_dir_name, csv_path, for_test = True)
+        conv_dict = make_conversion_dict(os.path.join(csv_path, 'classes.csv'))
         self.assertIn('class_0', conv_dict.keys())
         self.assertEqual(conv_dict['class_0'], '0')
         self.assertIn('class_1', conv_dict.keys())
@@ -179,7 +182,7 @@ class TestUtils(unittest.TestCase):
         self.assertIn('class_2', conv_dict.keys())
         self.assertEqual(conv_dict['class_2'], '2')
 
-        inverted_conv_dict = make_conversion_dict(csv_path, inverted = True)
+        inverted_conv_dict = make_conversion_dict(os.path.join(csv_path, 'classes.csv'), inverted = True)
         self.assertIn('0', inverted_conv_dict.keys())
         self.assertEqual(inverted_conv_dict['0'], 'class_0')
         self.assertIn('1', inverted_conv_dict.keys())
