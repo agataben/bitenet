@@ -4,6 +4,7 @@ import os
 import numpy as np
 import random
 import yaml
+import csv
 
 from PIL import Image
 from glob import glob
@@ -112,6 +113,30 @@ class TestUtils(unittest.TestCase):
         img_path = img_dir_path + '/' + img_dir_name + '/class_0/0.jpg'
         indx = get_class_index_from_path(img_path, class_to_idx_dict)
         self.assertEqual(indx, 0)
+
+    def test_classes_csv(self):
+        img_dir_path = 'tests'
+        img_dir_name = 'images'
+        csv_path = 'tests'
+        class_to_idx_dict = make_class_to_idx_map(img_dir_path, img_dir_name, csv_path)
+        classes_csv_path = os.path.join(csv_path, 'classes.csv')
+        csv_exists = os.path.exists(classes_csv_path)
+        self.assertEqual(csv_exists, True)
+        with open(classes_csv_path) as f:
+            reader = csv.DictReader(f)
+            names = []
+            indexes = []
+            for row in reader:
+                names.append(row['class'])
+                indexes.append(row['index'])
+
+        self.assertEqual(names[0], 'class_0')
+        self.assertEqual(names[1], 'class_1')
+        self.assertEqual(names[2], 'class_2')
+
+        self.assertEqual(indexes[0], '0')
+        self.assertEqual(indexes[1], '1')
+        self.assertEqual(indexes[2], '2')
 
     def test_transform_input_img(self):
         img_path = 'tests/images/class_0/0.jpg'
