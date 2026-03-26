@@ -25,23 +25,23 @@ class TestPreprocessing(unittest.TestCase):
 
     def test_build_image_path_label_df(self):
         class_names, labels, dataset_df = build_image_path_label_df('tests', True)
-        self.assertEqual(len(class_names), 4)
+        self.assertEqual(len(class_names), 27)
         self.assertIn('class_0', class_names)
         self.assertIn('class_1', class_names)
         self.assertIn('class_2', class_names)
         self.assertIn('class_3', class_names)
-        self.assertEqual(len(labels), 4)
+        self.assertEqual(len(labels), 27)
         self.assertIn(0, labels)
         self.assertIn(1, labels)
         self.assertIn(2, labels)
         self.assertIn(3, labels)
-        self.assertEqual(len(dataset_df), 4)
+        self.assertEqual(len(dataset_df), 27)
 
     def test_split_dataset(self):
         class_names, labels, dataset_df = build_image_path_label_df('tests', True)
         train_df, test_df = split_dataset(dataset_df, train_size = 0.5, val_size = 0.0, test_size = 0.5)
-        self.assertEqual(len(train_df), 2)
-        self.assertEqual(len(test_df), 2)
+        self.assertEqual(len(train_df), 13)
+        self.assertEqual(len(test_df), 14)
 
     @unittest.skipIf(os.getenv("CI") == "true", "Skip in CI")
     def test_split_dataset_path(self):

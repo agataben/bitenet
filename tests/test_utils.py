@@ -20,6 +20,7 @@ from src.utils import get_class_index_from_path
 from src.utils import build_toy_dataset
 from src.utils import get_norm_parameters
 from src.utils import transform_input_img
+from src.utils import make_conversion_dict
 
 
 class TestUtils(unittest.TestCase):
@@ -101,14 +102,14 @@ class TestUtils(unittest.TestCase):
     def test_make_class_to_idx_map(self):
         img_dir_path = 'tests'
         img_dir_name = 'images'
-        class_to_idx_dict = make_class_to_idx_map(img_dir_path, img_dir_name)
+        class_to_idx_dict = make_class_to_idx_map(img_dir_path, img_dir_name, for_test = True)
         self.assertIn('class_0', class_to_idx_dict.keys())
         self.assertEqual(class_to_idx_dict['class_0'], 0)
 
     def test_get_class_index_from_path(self):
         img_dir_path = 'tests'
         img_dir_name = 'images'
-        class_to_idx_dict = make_class_to_idx_map(img_dir_path, img_dir_name)
+        class_to_idx_dict = make_class_to_idx_map(img_dir_path, img_dir_name, for_test = True)
 
         img_path = img_dir_path + '/' + img_dir_name + '/class_0/0.jpg'
         indx = get_class_index_from_path(img_path, class_to_idx_dict)
@@ -118,7 +119,7 @@ class TestUtils(unittest.TestCase):
         img_dir_path = 'tests'
         img_dir_name = 'images'
         csv_path = 'tests'
-        class_to_idx_dict = make_class_to_idx_map(img_dir_path, img_dir_name, csv_path)
+        class_to_idx_dict = make_class_to_idx_map(img_dir_path, img_dir_name, csv_path, for_test = True)
         classes_csv_path = os.path.join(csv_path, 'classes.csv')
         csv_exists = os.path.exists(classes_csv_path)
         self.assertEqual(csv_exists, True)
@@ -167,4 +168,22 @@ class TestUtils(unittest.TestCase):
         counts = plot_dataset_composition('tests/toy_csv.csv', is_for_test = True)
         self.assertIn('class_0', counts.keys())
         self.assertEqual(counts['class_0'], 1)
+
+    def test_make_conversion_dict(self):
+        csv_path = 'tests/classes.csv'
+        conv_dict = make_conversion_dict(csv_path)
+        self.assertIn('class_0', conv_dict.keys())
+        self.assertEqual(conv_dict['class_0'], '0')
+        self.assertIn('class_1', conv_dict.keys())
+        self.assertEqual(conv_dict['class_1'], '1')
+        self.assertIn('class_2', conv_dict.keys())
+        self.assertEqual(conv_dict['class_2'], '2')
+
+        inverted_conv_dict = make_conversion_dict(csv_path, inverted = True)
+        self.assertIn('0', inverted_conv_dict.keys())
+        self.assertEqual(inverted_conv_dict['0'], 'class_0')
+        self.assertIn('1', inverted_conv_dict.keys())
+        self.assertEqual(inverted_conv_dict['1'], 'class_1')
+        self.assertIn('2', inverted_conv_dict.keys())
+        self.assertEqual(inverted_conv_dict['2'], 'class_2')
 

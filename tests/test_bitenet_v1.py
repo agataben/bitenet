@@ -16,7 +16,7 @@ class TestBiteNetV1(unittest.TestCase):
         set_seed(seed)
 
         # Build toy dataset
-        build_toy_dataset(samplings_n = 1, csv_path = 'tests')
+        build_toy_dataset(samplings_n = 27, csv_path = 'tests')
 
     def test_output_size_conv_layers(self):
         model = BiteNetV1()
@@ -33,11 +33,14 @@ class TestBiteNetV1(unittest.TestCase):
         img_path = 'tests/images/class_0/0.jpg'
         yaml_path = 'tests'
         csv_path = 'tests/toy_csv.csv'
+        conversion_file = 'tests/classes.csv'
         data_root = 'tests'
         m, s = calculate_mean_and_std(csv_path, data_root, yaml_path)
 
         model = BiteNetV1()
         model.path_to_norm_params_file = yaml_path
+        model.path_to_conversion_file = conversion_file
         model.eval()
         prediction = model.predict(img_path)
         self.assertIsInstance(prediction, torch.Tensor)
+
