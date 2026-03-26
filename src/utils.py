@@ -20,7 +20,7 @@ def set_seed(seed):
     np.random.seed(seed)
     random.seed(seed)
 
-def build_toy_dataset(data_root = 'tests', samplings_n = 3,
+def build_toy_dataset(data_root = 'tests', samplings_n = 27,
                       w = 384, h = 384, chanels_n = 3, csv_path = None):
 
     paths, labels = [], []
@@ -105,11 +105,14 @@ def get_list_of_img_paths(img_dir_path, img_dir_name):
 
     return img_paths_from_img_dir
 
-def make_class_to_idx_map(img_dir_path, img_dir_name, cvs_path = None):
+def make_class_to_idx_map(img_dir_path, img_dir_name, cvs_path = None, for_test = False):
 
     classes_common_path = img_dir_path + '/' + img_dir_name + '/*'
     class_names = [ basename(path) for path in glob(classes_common_path) ]
-    class_names.sort()
+    if for_test:
+        class_names.sort(key=lambda x: int(x.split("_")[1]))
+    else:
+        class_names.sort()
     indexes = [i for i in range(len(class_names))]
     class_to_idx_dict = {class_name: idx for class_name, idx in zip(class_names, indexes)}
     if cvs_path is not None:
@@ -143,9 +146,7 @@ def plot_dataset(dataset_path, class_to_indx_csv):
     if not os.path.exists(class_to_indx_csv):
         raise ValueError(f'Path {class_to_indx_csv} does not exist.')
 
-    with open(class_to_indx_csv) as f:
-        class_to_indx_dict = csv.DictReader(f)
-
+    class_to_indx_dict = make_conversion_dict(class_to_indx_csv)
     img_paths = glob(os.path.join(dataset_path, '*.jpg'))
     if len(img_paths) == 0:
         raise ValueError(f'No images in the selected path.')
@@ -186,4 +187,20 @@ def plot_dataset_composition(cvs_path, is_for_test = False):
     plt.show()
     if is_for_test:
         return counts
+
+def make_conversion_dict(conversion_csv_path, inverted = False):
+    if not os.path.exists(conversion_csv_path):
+        raise ValueError('Invalid path for conversion csv.')
+    class_to_indx_dict = {}
+    with open(conversion_csv_path) as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            class_name = row['class']
+            index = row['index']
+            if inverted:
+                class_to_indx_dict[index] = class_name
+            else:
+                class_to_indx_dict[class_name] = index
+
+    return class_to_indx_dict
 
