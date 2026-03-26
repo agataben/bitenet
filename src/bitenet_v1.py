@@ -1,5 +1,6 @@
 from torch import nn
 from src.utils import transform_input_img
+from src.utils import make_conversion_dict
 
 class BiteNetV1(nn.Module):
     def __init__(self):
@@ -29,10 +30,11 @@ class BiteNetV1(nn.Module):
             nn.ReLU()
         )
 
-        self.classifier = nn.Linear(252,101)
+        self.classifier = nn.Linear(252, 27)
 
 
         self.path_to_norm_params_file = None
+        self.path_to_conversion_file = None
 
     def forward(self,x):
         x = self.conv_1(x)
@@ -43,8 +45,10 @@ class BiteNetV1(nn.Module):
 
     def predict(self, img_path):
         transformed_img = transform_input_img(img_path, self.path_to_norm_params_file)
+        conversion_dict = make_conversion_dict(self.path_to_conversion_file, inverted = True)
         model_output = self.forward(transformed_img)
-        prediction =  model_output.to('cpu').max(1)[1]
-        print(f'Class {prediction.item()}')
+        prediction = model_output.to('cpu').max(1)[1]
+        index = str(prediction.item())
+        print(f'{conversion_dict[index]}')
         return prediction
 
