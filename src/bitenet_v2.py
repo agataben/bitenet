@@ -9,6 +9,7 @@ class BiteNetV2(nn.Module):
     def __init__(self):
         super(BiteNetV2, self).__init__()
 
+        self.weights = AlexNet_Weights.DEFAULT
         self.structure = alexnet(weights = AlexNet_Weights.DEFAULT)
 
         in_features = self.structure.classifier[6].in_features
