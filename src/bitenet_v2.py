@@ -1,5 +1,6 @@
 import os
 
+from PIL import Image
 from torch import nn
 from torchvision.models import alexnet, AlexNet_Weights
 from src.utils import make_conversion_dict
