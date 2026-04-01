@@ -1,4 +1,5 @@
 import os
+import torch
 
 from PIL import Image
 from torch import nn
@@ -25,12 +26,15 @@ class BiteNetV2(nn.Module):
         if not os.path.exists(img_path):
             raise ValueError(f'Path {img_path} does not exist')
 
+        self.eval()
         img = Image.open(img_path).convert('RGB')
         transf = self.weights.transforms()
-        transformed_img = transf(img)
+        transformed_img = transf(img).unsqueeze(0)
         conversion_dict = make_conversion_dict(self.path_to_conversion_file, inverted = True)
-        model_output = self.forward(transformed_img)
-        prediction = model_output.to('cpu').max(1)[1]
+        with torch.no_grad():
+            model_output = self.forward(transformed_img)
+            prediction = model_output.to('cpu').max(1)[1]
+
         index = str(prediction.item())
         print(f'{conversion_dict[index]}')
         return prediction

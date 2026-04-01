@@ -1,3 +1,5 @@
+import torch
+
 from torch import nn
 from src.utils import transform_input_img
 from src.utils import make_conversion_dict
@@ -44,11 +46,14 @@ class BiteNetV1(nn.Module):
         return x
 
     def predict(self, img_path):
+        self.eval()
         transformed_img = transform_input_img(img_path, self.path_to_norm_params_file)
         conversion_dict = make_conversion_dict(self.path_to_conversion_file, inverted = True)
-        model_output = self.forward(transformed_img)
-        prediction = model_output.to('cpu').max(1)[1]
+        with torch.no_grad():
+            model_output = self.forward(transformed_img)
+            prediction = model_output.to('cpu').max(1)[1]
         index = str(prediction.item())
+
         print(f'{conversion_dict[index]}')
         return prediction
 
