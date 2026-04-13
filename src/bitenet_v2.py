@@ -25,6 +25,11 @@ class BiteNetV2(nn.Module):
     def predict(self, img_path):
         if not os.path.exists(img_path):
             raise ValueError(f'Path {img_path} does not exist')
+        
+        ckpt_file_path = 'results/bitenetv2/model/bitenetv2.pth'
+        ckpt_file = torch.load(ckpt_file_path, map_location=torch.device('cpu'))
+        self.path_to_conversion_file = 'data/classes.csv'
+        self.load_state_dict(ckpt_file['model'])
 
         self.eval()
         img = Image.open(img_path).convert('RGB')

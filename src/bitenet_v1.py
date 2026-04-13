@@ -46,6 +46,12 @@ class BiteNetV1(nn.Module):
         return x
 
     def predict(self, img_path):
+        ckpt_file_path = 'results/bitenetv1/model/bitenetv1.pth'
+        ckpt_file = torch.load(ckpt_file_path, map_location=torch.device('cpu'))
+        self.path_to_norm_params_file = 'data'
+        self.path_to_conversion_file = 'data/classes.csv'
+        self.load_state_dict(ckpt_file['model'])
+
         self.eval()
         transformed_img = transform_input_img(img_path, self.path_to_norm_params_file)
         conversion_dict = make_conversion_dict(self.path_to_conversion_file, inverted = True)
