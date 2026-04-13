@@ -31,3 +31,10 @@ jobs:
       - name: Run unittest from project root
         run: |
           python -m unittest discover
+
+      - name: Install Git LFS
+        run: git lfs install
+
+      - name: Pull LFS files
+        run: git lfs pull
+
