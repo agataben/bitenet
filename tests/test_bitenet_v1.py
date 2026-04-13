@@ -34,19 +34,15 @@ class TestBiteNetV1(unittest.TestCase):
         img_dir_path = 'tests'
         img_dir_name = 'images'
         csv_path = 'tests'
-        class_to_idx_dict = make_class_to_idx_map(img_dir_path, img_dir_name, csv_path, for_test = True)
+        _ = make_class_to_idx_map(img_dir_path, img_dir_name, csv_path, for_test = True)
 
         img_path = 'tests/images/class_0/0.jpg'
         yaml_path = 'tests'
         csv_file = 'tests/toy_csv.csv'
-        conversion_file = 'tests/classes.csv'
         data_root = 'tests'
-        m, s = calculate_mean_and_std(csv_file, data_root, yaml_path)
+        _, _ = calculate_mean_and_std(csv_file, data_root, yaml_path)
 
         model = BiteNetV1()
-        model.path_to_norm_params_file = yaml_path
-        model.path_to_conversion_file = conversion_file
-        model.eval()
         prediction = model.predict(img_path)
         self.assertIsInstance(prediction, torch.Tensor)
 
