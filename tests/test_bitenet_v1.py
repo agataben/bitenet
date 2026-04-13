@@ -3,6 +3,7 @@ import torch
 import numpy as np
 import random
 
+from unittest.mock import patch
 from src.bitenet_v1 import BiteNetV1
 from src.utils import set_seed
 from src.utils import build_toy_dataset
@@ -43,6 +44,12 @@ class TestBiteNetV1(unittest.TestCase):
         _, _ = calculate_mean_and_std(csv_file, data_root, yaml_path)
 
         model = BiteNetV1()
-        prediction = model.predict(img_path)
+        fake_ckpt = {
+        "model": model.state_dict()
+        }
+
+        with patch("src.bitenet_v1.torch.load", return_value=fake_ckpt):
+            prediction = model.predict(img_path)
+
         self.assertIsInstance(prediction, torch.Tensor)
 
