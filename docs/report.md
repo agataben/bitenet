@@ -191,7 +191,7 @@ The models presented are relatively simple and do not achieve the performance of
 Further improvements could be achieved by training BiteNetV3 for a longer time; however, this may increase the risk of overfitting. Additionally, exploring different training hyperparameters could be beneficial in identifying a more optimal configuration for the model.
 
 
-## Riferimenti
+## References
 - [Torch library](https://pytorch.org)
 - [Food-101 dataset](https://data.vision.ee.ethz.ch/cvl/datasets_extra/food-101/)
 - [Google Colab](https://colab.research.google.com)
