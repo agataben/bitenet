@@ -59,7 +59,7 @@ In this project, three models have been built:
 
 The strategy of transfer learning has been chosen for the other two models, both pre-trained on the ImageNet dataset. The architectures and weights of these models were loaded from the `torchvision.models module`. Each of those models has built-in transformation of the data that is necessary to use the model in inference.
 
-2) **BiteNetV2**: an AlexNet network using transfer learning (pre-trained on ImageNet). We modified the last layer for a size 27 output. Two experiments were conducted: one using built-in AlexNet transformations (resulting in overfitting) and a second applying data augmentation as regularization.
+2) **BiteNetV2**: an AlexNet network using transfer learning (pre-trained on ImageNet). The last layer was modified for a size 27 output. Two experiments were conducted: one using built-in AlexNet transformations (resulting in overfitting) and a second applying data augmentation as regularization.
 
 3) **BiteNetV3**: a ResNet18 network, modified for 27 outputs and trained directly with data augmentation, based on observations from BiteNetV2.
 
@@ -124,9 +124,13 @@ In both experiments, the model was trained for 20 epochs
 ![Test set composition](/media/loss_test_2.png)
 
 
-In the first experiment, we used standard AlexNet transformations, assuming the two dropout layers would provide enough regularization. However, overfitting occurred: the validation loss reached a minimum and then began to grow while training loss continued to drop.
+In the first experiment, standard AlexNet transformations were used, assuming the two dropout layers would provide enough regularization. However, overfitting occurred: the validation loss reached a minimum and then began to grow while training loss continued to drop.
 
-In the second experiment, we applied data augmentation. Overfitting was greatly reduced; although the validation loss trend became somewhat constant (globally growing if comparing the first and last values), the results were better. Comparing Exp 1 to Exp 2: training loss increased by 112% and training accuracy dropped by 10.74%, but validation loss decreased by 17.13% and validation accuracy grew by 2.32%. This shows the model generalized much better.
+In the second experiment, data augmentation was used, applying the following transformations to the images:
+1) center crop
+2) random horizontal flip.
+
+Overfitting was greatly reduced; although the validation loss trend became somewhat constant (globally growing if comparing the first and last values), the results were better. Comparing Exp 1 to Exp 2: training loss increased by 112% and training accuracy dropped by 10.74%, but validation loss decreased by 17.13% and validation accuracy grew by 2.32%. This shows the model generalized much better.
 The values already mentioned are in the tables below.
 
 *Training*
@@ -144,7 +148,7 @@ The values already mentioned are in the tables below.
 There is a clear improvement from Experiment 1 to Experiment 2; however, the main issue with the second experiment is the nearly constant trend of the validation loss.
 In this context, the use of batch normalization was considered in order to trigger a decrease in the validation loss. However, it is not straightforward to insert additional layers into a model with a fixed architecture; therefore, the simplest solution was to modify the model structure.
 In fact, “BiteNetV3” is based on the ResNet-18 architecture, which does not rely on dropout layers but instead makes use of batch normalization.
-This model was trained using data augmentation from the beginning; without it, the model would have likely overfitted.
+This model was trained using data augmentation from the beginning with the same transformations as before; without it, the model would have likely overfitted.
 The trends of the training and test metrics are shown below.
 
 *Training accuracy*
@@ -185,8 +189,37 @@ The test-accuracy values of each model are reported in the following table, alre
 
 It is clear that the performance of BiteNetV3 is superior to that of the other two models. The gap between BiteNetV3 and BiteNetV1 is the largest, which is expected given that the first version of the model is intentionally simple. Therefore, the most meaningful comparison is between BiteNetV2 and BiteNetV3.
 BiteNetV3 outperforms BiteNetV2, mainly because it is based on the ResNet-18 architecture, which is deeper and more complex than AlexNet. It also shows better behavior with respect to overfitting.
-Each model was also evaluated on a small batch of sample images to assess its performance in inference mode. The images are located in the `data/samples` directory, and the models’ behavior can be observed in the notebook `Example_BiteNet.ipynb`.
-As expected, BiteNetV3 performs better than the other models on these images. However, it fails to correctly classify a cheesecake photographed from above, incorrectly labeling it as “cannoli”. Interestingly, the same image is correctly classified by BiteNetV2. On the other hand, all models correctly classify the image of edamame, likely because it is a clear example with minimal noise.
+Each model was also evaluated on a small batch of sample images to try its performance in inference mode.
+The used images with their associated label can be seen in the figure below and  are located in the `data/samples` directory; the following table is a summary of the obtained results, also reported in the notebook `Example_BiteNet.ipynb`.
+
+*Samples*
+![Samples](/media/samples.png)
+
+
+| Image label     | BiteNetV1 prediction | BiteNetV2 prediction | BiteNetV3 prediction |
+|-----------------|----------------------|----------------------|----------------------|
+| *cheesecake*    | cannoli              | **cheesecake**       | cannoli              |
+| *baklava*       | escargots            | chicken_wings        | **baklava**          |
+| *churros*       | fish_and_chips       | beignets             | **churros**          |
+| *fish_and_chips*| club_sandwich        | club_sandwich        | **fish_and_chips**   |
+| *cup_cakes*     | donuts               | **cup_cakes**        | **cup_cakes**        |
+| *edamame*       | **edamame**          | **edamame**          | **edamame**          |
+| *french_fries*  | baklava              | **french_fries**     | **french_fries**     |
+| *club_sandwich* | caesar_salad         | **club_sandwich**    | **club_sandwich**    |
+
+
+As expected, BiteNetV3 performs better than the other models on these images. However, it fails to correctly classify a cheesecake photographed from above, incorrectly labeling it as “cannoli”. This may be because the model confuses the white topping of the cheesecake with the ricotta filling of a cannolo. Interestingly, the same image is correctly classified by BiteNetV2.
+On the other hand, all models correctly classify the edamame image. This is likely because it is a clear example with minimal noise and because it is the only completely green food among the 27 dishes, making it easier to identify.
+As observed, the baklava image is more challenging, mainly due to its color. In fact, both BiteNetV1 and BiteNetV2 make incorrect predictions, while BiteNetV3 correctly classifies it, which further supports its superior performance.
+The club sandwich image is somewhat confusing due to the presence of fried chips and green salad. BiteNetV1 and BiteNetV2 correctly predict its label, while BiteNetV3 misclassifies it, likely being confused by the salad inside the sandwich.
+The following table shows the percentage of correct predictions for each model on the 8 images above.
+
+| Model      | Correct Predictions (%) |
+|------------|-------------------------|
+| BiteNetV1  | 12.5%                   |
+| BiteNetV2  | 62.5%                   |
+| BiteNetV3  | 87.5%                   |
+
 The models presented are relatively simple and do not achieve the performance of state-of-the-art models specifically designed for food recognition. Moreover, the problem addressed here represents only a small subset of the broader food classification task.
 Further improvements could be achieved by training BiteNetV3 for a longer time; however, this may increase the risk of overfitting. Additionally, exploring different training hyperparameters could be beneficial in identifying a more optimal configuration for the model.
 
