@@ -1,7 +1,7 @@
 # BiteNet: food classification
 
 ## Group
-- Year: 2025/2026
+- Year: 2024/2025
 - Agata Benvegna, 1000069182
 
 ## Abstract
