@@ -4,7 +4,7 @@ In this project, three models are developed for a food classification task and c
 
 * **BiteNetV1**: a simple custom architecture designed to establish the training pipeline and become familiar with the workflow in Google Colab.
 * **BiteNetV2**: based on the AlexNet architecture pre-trained on ImageNet. It is adapted for this specific dataset and trained using data augmentation to mitigate overfitting.
-* **BiteNetV3**: based on the ResNet18 architecture pre-trained on ImageNet, utilizing data augmentation and batch normalization to achieve superior performance.
+* **BiteNetV3**: based on the ResNet18 architecture pre-trained on ImageNet, using data augmentation and batch normalization to achieve superior performance.
 
 ---
 
